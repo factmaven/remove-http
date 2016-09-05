@@ -7,7 +7,7 @@ Stable tag: 1.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Automatically scan your website and removes both HTTP and HTTPS protocols from your URL links. Helps resolves the mixed content warnings.
+Automatically scan your website and remove both HTTP and HTTPS protocols from your URL links. Helps resolve mixed content warnings.
 
 == Description ==
 **Remove HTTP** is a plugin that a automatically scans your website and removes both `http:` and `https:` protocols from your links without permanently changing anything. This helps resolve websites that are having "mixed content warnings" when your website has assets (images, JavaScript, and CSS) loading both HTTP and HTTPS.
@@ -32,7 +32,6 @@ No configuration is required. Simply install and activate Remove HTTP plugin and
 
 = Contribute on GitHub =
 [View this plugin on GitHub](https://github.com/factmaven/remove-http)
-
 We're always looking for suggestions to improve our plugin!
 
 == Installation ==

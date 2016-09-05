@@ -2,7 +2,7 @@
 /**
     Plugin Name: Remove HTTP
     Plugin URI: https://wordpress.org/plugins/remove-http/
-    Description: Automatically remove both HTTP and HTTPS protocols from your links.
+    Description: Automatically remove both HTTP and HTTPS protocols from all web links.
     Version: 1.0.0
     Author: <a href="https://www.factmaven.com/">Fact Maven Corp.</a>
     License: GPLv3
