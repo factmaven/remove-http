@@ -29,5 +29,6 @@ class Fact_Maven_Remove_HTTP {
         # Return the links as protocol relative
         return $buffer;
     }
+}
 
 new Fact_Maven_Remove_HTTP();
