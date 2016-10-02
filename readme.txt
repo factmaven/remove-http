@@ -1,13 +1,13 @@
 === Remove HTTP ===
 Contributors: factmaven, ethanosullivan
-Tags: protocol relative url, relative protocol, protocol rewriting, remove http, remove https, url, http, https, rewrite, cloudflare
+Tags: protocol relative url, relative protocol, protocol rewriting, remove http, remove https, url, http, https, rewrite, cloudflare, mixed content warning, insecure content, mixed content, partially encrypted, ssl
 Requires at least: 1.2.0
 Tested up to: 4.6
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Automatically scan your website and remove both HTTP and HTTPS protocols from your URL links. Helps resolve mixed content warnings.
+Automatically scan your website and remove both HTTP and HTTPS protocols from your links. Helps resolve mixed content warnings.
 
 == Description ==
 **Remove HTTP** is a plugin that a automatically scans your website and removes both `http:` and `https:` protocols from your links without permanently changing anything. This helps resolve websites that are having "mixed content warnings" when your website has assets (images, JavaScript, and CSS) loading both HTTP and HTTPS.
@@ -40,5 +40,9 @@ We're always looking for suggestions to improve our plugin!
 1. Let it settle in a for a minute and be amazed.
 
 == Changelog ==
-= 1.0.0 (00/00/00) =
+= 1.0.1 (10/01/16) =
+* Less code used to removt HTTP and HTTPS protocols
+* Comments added for code explanation
+
+= 1.0.0 (09/05/16) =
 * Initial release, huzzah!
