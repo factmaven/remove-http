@@ -16,18 +16,18 @@ No configuration is required. Simply install and activate Remove HTTP plugin and
 
 = Before =
 `
-<link rel='stylesheet' id='some-id'  href='https://link.to/some/style.css' type='text/css' media='all' />
-<script type='text/javascript' src='http://link.to/some/script.js'></script>
-<a href="https://web.site" title="Fact Maven" rel="home">Some Link</a>
-<img src="http://link.to/some/image.jpg" alt="Some Alt" width="150" height="50" />
+<link rel='stylesheet' id='some-id'  href='https://example.com/some/style.css' type='text/css' media='all' />
+<script type='text/javascript' src='http://example.com/some/script.js'></script>
+<a href="https://example.com" title="Fact Maven" rel="home">Some Link</a>
+<img src="http://example.com/some/image.jpg" alt="Some Alt" width="150" height="50" />
 `
 
 = After =
 `
-<link rel='stylesheet' id='some-id'  href='//link.to/some/style.css' type='text/css' media='all' />
-<script type='text/javascript' src='//link.to/some/script.js'></script>
-<a href="//web.site" title="Some Title" rel="home">Some Link</a>
-<img src="//link.to/some/image.jpg" alt="Some Alt" width="150" height="50" />
+<link rel='stylesheet' id='some-id'  href='//example.com/some/style.css' type='text/css' media='all' />
+<script type='text/javascript' src='//example.com/some/script.js'></script>
+<a href="//example.com" title="Some Title" rel="home">Some Link</a>
+<img src="//example.com/some/image.jpg" alt="Some Alt" width="150" height="50" />
 `
 
 = Contribute on GitHub =
@@ -40,8 +40,8 @@ We're always looking for suggestions to improve our plugin!
 1. Let it settle in a for a minute and be amazed.
 
 == Changelog ==
-= 1.0.1 (10/01/16) =
-* Less code used to removt HTTP and HTTPS protocols
+= 1.0.1 (10/02/16) =
+* Improve regex to find all protocols
 * Comments added for code explanation
 
 = 1.0.0 (09/05/16) =
