@@ -2,7 +2,7 @@
 Contributors: factmaven, ethanosullivan
 Tags: protocol relative url, relative protocol, protocol rewriting, remove http, remove https, url, http, https, rewrite, cloudflare, mixed content warning, insecure content, mixed content, partially encrypted, ssl
 Requires at least: 1.2.0
-Tested up to: 4.6
+Tested up to: 4.6.1
 Stable tag: 1.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -40,7 +40,7 @@ We're always looking for suggestions to improve our plugin!
 1. Let it settle in a for a minute and be amazed.
 
 == Changelog ==
-= 1.0.1 (10/02/16) =
+= 1.0.1 (10/10/16) =
 * Improve regex to find all protocols
 * Comments added for code explanation
 

@@ -3,9 +3,10 @@
  * Plugin Name: Remove HTTP
  * Plugin URI: https://wordpress.org/plugins/remove-http/
  * Description: Automatically remove both HTTP and HTTPS protocols from all web links.
- * Author: <a href="https://www.factmaven.com/#plugins">Fact Maven</a>
- * License: GPLv3
  * Version: 1.0.1
+ * Author: Fact Maven
+ * Author URI: https://www.factmaven.com/#plugins
+ * License: GPLv3
  */
 
 # If accessed directly, exit
@@ -14,21 +15,22 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Fact_Maven_Remove_HTTP {
 
     public function __construct() {
-        # If in the admin panel, don't run function
-        if (  ! is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
-            # Remove HTTP and HTTPS protocols
-            add_action( 'plugins_loaded', array( $this, 'output_buffering' ), 10, 1 );
-        }
+        # Remove HTTP and HTTPS protocols
+        add_action( 'plugins_loaded', array( $this, 'output_buffering' ), 10, 1 );
     }
 
     public function output_buffering() {
-        # Enable output buffering
-        ob_start( array( $this, 'remove_protocols' ) );
+        global $pagenow;
+        # If the page is not 'General Settings', proceed
+        if ( $pagenow != 'options-general.php' ) {
+            # Enable output buffering
+            ob_start( array( $this, 'remove_protocols' ) );
+        }
     }
 
     public function remove_protocols( $buffer ) {
         $content_type = NULL;
-        # Check for Content-Type headers only
+        # Check for 'Content-Type' headers only
         foreach ( headers_list() as $header ) {
             if (strpos( strtolower( $header ), 'content-type:' ) === 0 ) {
                 $pieces = explode( ':', strtolower( $header ) );
@@ -49,5 +51,5 @@ class Fact_Maven_Remove_HTTP {
         return $buffer;
     }
 }
-
+# Instantiate the class
 new Fact_Maven_Remove_HTTP();

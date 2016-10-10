@@ -1,3 +1,1 @@
 <?php
-
-// Nope, try again.
