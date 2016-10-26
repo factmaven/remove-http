@@ -1,2 +1,7 @@
 <?php
-# Blank index for hosts that enable directory browsing
+/**
+> 【=◈︿◈=】
+> IS ANYONE THERE?
+> OH -
+> HI!
+*/
