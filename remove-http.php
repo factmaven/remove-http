@@ -3,7 +3,7 @@
  * Plugin Name: Remove HTTP
  * Plugin URI: https://wordpress.org/plugins/remove-http/
  * Description: Removes both HTTP and HTTPS protocols from links.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Fact Maven
  * Author URI: https://www.factmaven.com
  * License: GPLv3
@@ -26,13 +26,13 @@ class Fact_Maven_Remove_HTTP {
         # Relocate settings field using jQuery
         add_action( 'admin_footer', array( $this, 'settings_location' ), 10, 1 );
         # Remove HTTP and HTTPS protocols
-        add_action( 'wp_loaded', array( $this, 'protocol_relative' ), 10, 1 );
+        add_action( 'wp_loaded', array( $this, 'protocol_relative' ), PHP_INT_MAX, 1 );
     }
 
     public function settings_link( $links, $file ) {
         # Display settings link
         if ( $file == plugin_basename( __FILE__ ) && current_user_can( 'manage_options' ) ) {
-            array_unshift( $links, '<a href="options-general.php#home">Settings</a>' );
+            array_unshift( $links, '<a href="options-general.php#home"><span class="dashicons dashicons-admin-settings"></span> Settings</a>' );
         }
         # Return the settings link
         return $links;
@@ -76,16 +76,18 @@ class Fact_Maven_Remove_HTTP {
             }
             # If the content-type is 'NULL' or 'text/html', apply rewrite
             if ( is_null( $content_type ) || substr( $content_type, 0, 9 ) === 'text/html' ) {
+                $tag = 'script|link|base|img|form|a|meta|iframe|svg|div';
+                $attribute = 'href|src|srcset|action|content|data-project-file';
                 # If 'Protocol Relative URL' option is checked, only apply change to internal links
                 if ( $this->option == 1 ) {
                     # Remove protocol from home URL
                     $website = preg_replace( '/https?:\/\//', '', home_url() );
-                    # Remove protocol form internal links
-                    $links = preg_replace( '/(<(script|link|base|img|form|a|meta|iframe|svg)([^>]*)(href|src|action|content)=["\'])https?:\/\/' . $website . '/i', '$1//' . $website, $links );
+                    # Remove protocol from internal links
+                    $links = preg_replace( '/(<(' . $tag . ')([^>]*)(' . $attribute . ')=["\'])https?:\/\/' . $website . '/i', '$1//' . $website, $links );
                 }
-                # Else, remove protocols form all links
+                # Else, remove protocols from all links
                 else {
-                    $links = preg_replace( '/(<(script|link|base|img|form|a|meta|iframe|svg)([^>]*)(href|src|action|content)=["\'])https?:\/\//i', '$1//', $links );
+                    $links = preg_replace( '/(<(' . $tag . ')([^>]*)(' . $attribute . ')=["\'])https?:\/\//i', '$1//', $links );
                 }
             }
             # Return protocol relative links

@@ -1,16 +1,17 @@
 === Remove HTTP: Fix Mixed Content Warning ===
 Contributors: factmaven, ethanosullivan
-Tags: protocol relative url, relative protocol, protocol rewriting, remove http, remove https, url, http, https, rewrite, cloudflare, mixed content warning, insecure content, mixed content, partially encrypted, ssl
+Donate link: https://www.factmaven.com/
+Tags: cloudflare, http, https, insecure content, mixed content, mixed content warning, partially encrypted, protocol relative url, protocol rewriting, relative protocol, remove http, remove https, rewrite, ssl, url
 Requires at least: 3.0.0
-Tested up to: 4.6.1
-Stable tag: 1.1.0
+Tested up to: 4.7.1
+Stable tag: 1.1.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Fixes all mixed content warnings. Removes both HTTP and HTTPS protocols from all links.
+Fixes all mixed content warnings. Removes both HTTP and HTTPS protocols from all links from the front-end and back-end.
 
 == Description ==
->**Remove HTTP** is a plugin that a automatically scans and removes both `http:` and `https:` protocols from all links. This helps resolve websites that are having "[mixed content warnings](https://wordpress.org/plugins/remove-http/faq/)" which is when the website has assets (images, JavaScript, and CSS) loading both HTTP and HTTPS.
+>**Remove HTTP** is a plugin that automatically scans and removes both `http:` and `https:` protocols from all links. This helps resolve websites that are having "[mixed content warnings](https://wordpress.org/plugins/remove-http/faq/)" which is when the website has assets (images, JavaScript, and CSS) loading both HTTP and HTTPS.
 
 No changes to the links are made in the database. Simply install and activate the plugin and the changes will be immediate. Links that have `http://` or `https://` will only have `//`, making them protocol relative URLs. Below is a before and after example.
 
@@ -31,14 +32,7 @@ No changes to the links are made in the database. Simply install and activate th
 `
 
 = Apply to internal links only =
-Additionally, there is an option (under the *General* settings) to apply changes to internal links only. Below an an example output if the website's site address is `http://example.com`:
-`
-<link rel="profile" href="http://gmpg.org/xfn/11">
-<script type='text/javascript' src='//example.com/some/script.js'></script>
-<a href="http://www.factmaven.com" title="Fact Maven" rel="home">Fact Maven</a>
-<img src="//example.com/some/image.jpg" alt="Some Alt" width="150" height="50" />
-`
-
+Additionally, there is an option (under the *General* settings) to apply changes to internal links only.
 
 = Contribute on GitHub =
 Want to help improve this plugin? Head over to our [GitHub page](https://github.com/factmaven/remove-http/).
@@ -46,7 +40,7 @@ Want to help improve this plugin? Head over to our [GitHub page](https://github.
 == Installation ==
 1. Upload the plugin to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the `Plugins` menu in WordPress.
-1. Let it settle in a for a minute and be amazed.
+1. Let it settle in for a minute and be amazed.
 
 == Frequently Asked Questions ==
 = What is mixed content? =
@@ -55,16 +49,35 @@ According to [Google](https://developers.google.com/web/fundamentals/security/pr
 
 In short, mixed content degrades the security and user experience of your HTTPS site.
 
+= What does the option "*only apply to internal links*" do exactly? =
+Changes will only apply to internal links. For example, if your domain was `example.com`, it will look like the following:
+`
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<script type='text/javascript' src='//example.com/some/script.js'></script>
+<a href="https://www.factmaven.com" title="Fact Maven" rel="home">Fact Maven</a>
+<img src="//example.com/some/image.jpg" alt="Some Alt" width="150" height="50" />
+` 
+
 == Changelog ==
+= 1.1.1 =
+
+*2017-01-16*
+
+* Minor code improvements
+
 = 1.1.0 =
-* **[2016-10-25]**
+
+*2016-10-25*
+
 * **Feature**: Option to remove protocols from internal links only (see *General* > *Protocol Relative URL*)
 * Added uninstall to delete custom plugin options
 * Improved regex to find all protocols
 * Simplified and removed redundant code
 
 = 1.0.2 =
-* **[2016-10-24]**
+
+*2016-10-24*
+
 * Function will run once WordPress, all plugins, and the theme are fully loaded
 * Reverted back to original regex from v1.0.0
 * Upgrade notice shown when update is available
@@ -72,12 +85,16 @@ In short, mixed content degrades the security and user experience of your HTTPS 
 * **Fix**: YouTube videos in [Revolution Slider](https://revolution.themepunch.com) plugin stopped playing
 
 = 1.0.1 =
-* **[2016-10-10]**
+
+*2016-10-10*
+
 * Improved regex to find all protocols
 * Comments added for code explanation
 
 = 1.0.0 =
-* **[2016-09-05]**
+
+*2016-09-05*
+
 * Initial release, huzzah!
 
 == Upgrade Notice ==
