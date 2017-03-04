@@ -62,37 +62,49 @@ class Fact_Maven_Remove_HTTP {
         </fieldset> <?php
     }
 
+    private function get_content_type() {
+        # Try to find the value of the Content-Type header
+        foreach ( headers_list() as $header ) {
+            if ( stripos( $header, 'content-type:' ) === 0 ) {
+                $pieces = explode( ':', $header );
+                return strtolower( trim( $pieces[1] ) );
+            }
+        }
+        # We didn't find it
+        return NULL;
+    }
+
+    private function process_html( $html ) {
+        $tag = 'script|link|base|img|form|a|meta|iframe|svg|div';
+        $attribute = 'href|src|srcset|action|content|data-project-file';
+        # If 'Protocol Relative URL' option is checked, only apply change to internal links
+        if ( $this->option == 1 ) {
+            # Remove protocol from home URL
+            $website = preg_replace( '/https?:\/\//', '', home_url() );
+            # Remove protocol from internal links
+            $html = preg_replace( '/(<(' . $tag . ')([^>]*)(' . $attribute . ')=["\'])https?:\/\/' . $website . '/i', '$1//' . $website, $html );
+        }
+        # Else, remove protocols from all links
+        else {
+            $html = preg_replace( '/(<(' . $tag . ')([^>]*)(' . $attribute . ')=["\'])https?:\/\//i', '$1//', $html );
+        }
+        # Return protocol relative links
+        return $html;
+    }
+
+    public function ob_flush_handler( $html ) {
+        # Get the declared Content-Type, if any
+        $content_type = $this->get_content_type();
+
+        # Apply processing only if the type is declared as text/html or not declared
+        return $content_type === null || strpos( $content_type, 'text/html' ) === 0
+            ? $this->process_html( $html )
+            : $html;
+    }
+
     public function protocol_relative() {
         # Enable output buffering
-        ob_start( function( $links ) {
-            $content_type = NULL;
-            # Check for 'Content-Type' headers only
-            foreach ( headers_list() as $header ) {
-                if ( strpos( strtolower( $header ), 'content-type:' ) === 0 ) {
-                    $pieces = explode( ':', strtolower( $header ) );
-                    $content_type = trim( $pieces[1] );
-                    break;
-                }
-            }
-            # If the content-type is 'NULL' or 'text/html', apply rewrite
-            if ( is_null( $content_type ) || substr( $content_type, 0, 9 ) === 'text/html' ) {
-                $tag = 'script|link|base|img|form|a|meta|iframe|svg|div';
-                $attribute = 'href|src|srcset|action|content|data-project-file';
-                # If 'Protocol Relative URL' option is checked, only apply change to internal links
-                if ( $this->option == 1 ) {
-                    # Remove protocol from home URL
-                    $website = preg_replace( '/https?:\/\//', '', home_url() );
-                    # Remove protocol from internal links
-                    $links = preg_replace( '/(<(' . $tag . ')([^>]*)(' . $attribute . ')=["\'])https?:\/\/' . $website . '/i', '$1//' . $website, $links );
-                }
-                # Else, remove protocols from all links
-                else {
-                    $links = preg_replace( '/(<(' . $tag . ')([^>]*)(' . $attribute . ')=["\'])https?:\/\//i', '$1//', $links );
-                }
-            }
-            # Return protocol relative links
-            return $links;
-        } );
+        ob_start( array( $this, 'ob_flush_handler' ) );
     }
 }
 # Instantiate the class
