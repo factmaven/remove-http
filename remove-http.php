@@ -36,7 +36,7 @@ class Fact_Maven_Remove_HTTP {
     private $global_attrs = array( 'style' );
 
     # The text content of these tags will be processed
-    private $global_content_tags = array( 'style' );
+    private $global_content_tags = array( 'style', 'script' );
 
     public function __construct() {
         # Get plugin option
@@ -126,7 +126,7 @@ class Fact_Maven_Remove_HTTP {
 
         # Create the regex in use based on the current option value
         $replace_regex = $this->option == 1
-            ? '#https?:(//' . preg_replace( '#https?://#i', '', home_url() ) . ')#i'
+            ? '#https?:(//' . preg_replace( '#https?://#i', '', preg_quote ( home_url() , '#' ) ) . ')#i'
             : '#https?:(//[^/]+)#i';
 
         # Process the specific tag lists first
