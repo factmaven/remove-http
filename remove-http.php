@@ -3,7 +3,7 @@
  * Plugin Name: Remove HTTP
  * Plugin URI: https://wordpress.org/plugins/remove-http/
  * Description: Removes both HTTP and HTTPS protocols from links.
- * Version: 1.1.1
+ * Version: beta
  * Author: Fact Maven
  * Author URI: https://www.factmaven.com
  * License: GPLv3
@@ -109,11 +109,38 @@ class Fact_Maven_Remove_HTTP {
         }
     }
 
+    private function remove_scripts($html) {
+        $scripts = [];
+        $i = 0;
+        $template = '___REPLACED_SCRIPT_%d___';
+
+        $html = preg_replace_callback('#<script.+?</script>#is', function($match) use($html, $template, &$scripts, &$i) {
+            do {
+                $replacement = sprintf($template, $i++);
+            } while (strpos($html, $replacement) !== false);
+
+            $scripts[$replacement] = $match[0];
+            return $replacement;
+        }, $html);
+
+        return [$html, $scripts];
+    }
+
+    private function add_scripts($html, $scripts) {
+        foreach ($scripts as $placeholder => $script) {
+            $html = str_replace($placeholder, $script, $html);
+        }
+
+        return $html;
+    }
+
     private function process_html($html ) {
         # Check that we have DOM loaded, return the data unmodified if we don't
         if ( !class_exists( 'DOMDocument' ) || !class_exists( 'DOMXPath' ) ) {
             return $html;
         }
+
+        list($html, $scripts) = $this->remove_scripts($html);
 
         # Try to create a document and xpath, return the data unmodified if we can't
         $doc = new \DOMDocument();
@@ -152,7 +179,7 @@ class Fact_Maven_Remove_HTTP {
         }
 
         # Return the modified HTML as a string
-        return $doc->saveHTML();
+        return $this->add_scripts($doc->saveHTML(), $scripts);
     }
 
     public function ob_flush_handler( $html ) {
