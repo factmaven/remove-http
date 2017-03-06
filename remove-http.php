@@ -123,8 +123,9 @@ class Fact_Maven_Remove_HTTP {
         $xpath = new \DOMXPath( $doc );
 
         # Create the regex in use based on the current option value
+        $base_url_without_protocol = preg_replace( '#^https?://#i', '', home_url() , '#i' );
         $replace_regex = $this->option == 1
-            ? '#https?:(//' . preg_replace( '#https?://#i', '', preg_quote ( home_url() , '#' ) ) . ')#i'
+            ? '#https?:(//' . preg_quote( $base_url_without_protocol, '#' ) . ')#i'
             : '#https?:(//[^/]+)#i';
 
         # Process the specific tag lists first
