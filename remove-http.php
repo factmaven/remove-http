@@ -12,8 +12,6 @@
 # If accessed directly, exit
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Fact_Maven_Remove_HTTP_Processing_Failed_Exception extends \Exception {}
-
 class Fact_Maven_Remove_HTTP {
 
     private $option;
@@ -112,21 +110,22 @@ class Fact_Maven_Remove_HTTP {
     }
 
     private function process_html($html ) {
-        # Check that we have DOM loaded
+        # Check that we have DOM loaded, return the data unmodified if we don't
         if ( !class_exists( 'DOMDocument' ) || !class_exists( 'DOMXPath' ) ) {
-            throw new Fact_Maven_Remove_HTTP_Processing_Failed_Exception;
+            return $html;
         }
 
-        # Try to create a document and xpath
+        # Try to create a document and xpath, return the data unmodified if we can't
         $doc = new \DOMDocument();
         if ( !@$doc->loadHTML( $html, LIBXML_HTML_NODEFDTD ) ) {
-            throw new Fact_Maven_Remove_HTTP_Processing_Failed_Exception;
+            return $html;
         }
         $xpath = new \DOMXPath( $doc );
 
         # Create the regex in use based on the current option value
+        $base_url_without_protocol = preg_replace( '#^https?://#i', '', home_url() , '#i' );
         $replace_regex = $this->option == 1
-            ? '#https?:(//' . preg_replace( '#https?://#i', '', preg_quote ( home_url() , '#' ) ) . ')#i'
+            ? '#https?:(//' . preg_quote( $base_url_without_protocol, '#' ) . ')#i'
             : '#https?:(//[^/]+)#i';
 
         # Process the specific tag lists first
