@@ -16,7 +16,7 @@ class Fact_Maven_Remove_HTTP {
     # Define plugin option value
     private $option;
     # Keys are tag names, values are an array of attributes to process for those tags
-    private $tags = array(
+    /*private $tag_attribute = array(
         'script' => array( 'src' ),
         'link' => array( 'href' ),
         'base' => array( 'href' ),
@@ -27,7 +27,7 @@ class Fact_Maven_Remove_HTTP {
         'iframe' => array( 'src' ),
         'div' => array( 'data-project-file', 'style' ),
         'svg' => array( 'data-project-file' ),
-    );
+    );*/
     # These attributes will be processed for all tags
     private $list_attributes = array( 'href', 'src', 'srcset', 'style' );
 
@@ -143,7 +143,6 @@ class Fact_Maven_Remove_HTTP {
                 $replacement = sprintf( $template, $i++ );
             }
             while ( strpos( $html, $replacement ) !== FALSE );
-
             $scripts[$replacement] = $match[0];
             return $replacement;
         }, $html );
@@ -182,7 +181,7 @@ class Fact_Maven_Remove_HTTP {
         }
 
         # Process the specific tag lists first
-        /*foreach ( $this->tags as $tag => $attributes ) {
+        /*foreach ( $this->tag_attribute as $tag => $attributes ) {
             $xpath_expr = '//' . $tag . '[@' . implode( ' or @', $attributes ) . ']';
             foreach ( $xpath->query( $xpath_expr ) as $element ) {
                 $this->process_element_attributes( $element, $attributes, $regex );
