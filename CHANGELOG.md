@@ -1,4 +1,8 @@
 ## Changelog
+### 2.0.0
+*2017-03-DD*
+* Implement [DOMXPath](https://secure.php.net/manual/en/class.domxpath.php)
+
 ### 1.1.1
 *2017-01-16*
 * Minor code improvements

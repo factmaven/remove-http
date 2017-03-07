@@ -3,7 +3,7 @@
  * Plugin Name: Remove HTTP
  * Plugin URI: https://wordpress.org/plugins/remove-http/
  * Description: Removes both HTTP and HTTPS protocols from links.
- * Version: beta
+ * Version: 2.0.0-beta
  * Author: Fact Maven
  * Author URI: https://www.factmaven.com
  * License: GPLv3
@@ -13,11 +13,10 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Fact_Maven_Remove_HTTP {
-
+    # Define plugin option value
     private $option;
-
     # Keys are tag names, values are an array of attributes to process for those tags
-    private $replace_searches = array(
+    private $tags = array(
         'script' => array( 'src' ),
         'link' => array( 'href' ),
         'base' => array( 'href' ),
@@ -26,15 +25,11 @@ class Fact_Maven_Remove_HTTP {
         'a' => array( 'href' ),
         'meta' => array( 'content' ),
         'iframe' => array( 'src' ),
-        'div' => array( 'data-project-file' ),
+        'div' => array( 'data-project-file', 'style' ),
         'svg' => array( 'data-project-file' ),
     );
-
     # These attributes will be processed for all tags
-    private $global_attrs = array( 'style' );
-
-    # The text content of these tags will be processed
-    private $global_content_tags = array( 'style', 'script' );
+    private $list_attributes = array( 'href', 'src', 'srcset', 'style' );
 
     public function __construct() {
         # Get plugin option
@@ -80,6 +75,37 @@ class Fact_Maven_Remove_HTTP {
             </label>
             <p class="description">All external links will not be affected.</p>
         </fieldset> <?php
+        # New settings section below, will work on it after
+        ?>
+        <!-- <fieldset>
+            <legend class="screen-reader-text"><span>Site Address Format</span></legend>
+            <label>
+                <input name="factmaven_rhttp_format" type="radio" value="0" <?php checked( '0', $this->option ); ?>> Protocol-Relative URL<code>//example.com/sample-post/</code>
+            </label><br>
+            <label>
+                <input name="factmaven_rhttp_format" type="radio" value="1" <?php checked( '1', $this->option ); ?>> Relative URL<code>/sample-post/</code>
+            </label><br>
+            <label for="remove_http">
+                <input name="factmaven_rhttp_internal" type="checkbox" id="internal_links" value="1" <?php checked( '1', $this->option ); ?> /> Only apply to internal links
+            </label>
+            <p class="description">All external links will not be affected.</p>
+        </fieldset> -->
+        <?php
+    }
+
+    public function protocol_relative() {
+        # Enable output buffering
+        ob_start( array( $this, 'ob_flush_handler' ) );
+    }
+
+    public function ob_flush_handler( $html ) {
+        # Apply processing only if the type is applicable
+        if ( $this->is_applicable_content_type() ) {
+            return $this->process_html( $html );
+        }
+        else {
+            return $html;
+        }
     }
 
     private function is_applicable_content_type() {
@@ -90,57 +116,55 @@ class Fact_Maven_Remove_HTTP {
                 return strpos( strtolower( trim( $pieces[1] ) ), 'text/html' ) === 0;
             }
         }
-
         # We didn't find it, it was not declared so assume HTML
-        return true;
+        return TRUE;
     }
 
-    private function process_element_attributes( DOMElement $element, array $attributes, $replace_regex ) {
+    private function process_element_attributes( DOMElement $element, array $attributes, $regex ) {
         foreach ( $attributes as $attribute ) {
             # Check that the element actually has the target attribute
             if ( !$element->hasAttribute( $attribute ) ) {
                 continue;
             }
-
             # Get the current attribute value, modify it and set it back on the element
             $content = $element->getAttribute( $attribute );
-            $result = preg_replace( $replace_regex, '$1', $content );
+            $result = preg_replace( $regex, '$1', $content );
             $element->setAttribute( $attribute, $result );
         }
     }
 
-    private function remove_scripts($html) {
+    private function remove_scripts( $html ) {
         $scripts = [];
         $i = 0;
         $template = '___REPLACED_SCRIPT_%d___';
 
-        $html = preg_replace_callback('#<script.+?</script>#is', function($match) use($html, $template, &$scripts, &$i) {
+        $html = preg_replace_callback( '#<script.+?</script>#is', function( $match ) use( $html, $template, &$scripts, &$i ) {
             do {
-                $replacement = sprintf($template, $i++);
-            } while (strpos($html, $replacement) !== false);
+                $replacement = sprintf( $template, $i++ );
+            }
+            while ( strpos( $html, $replacement ) !== FALSE );
 
             $scripts[$replacement] = $match[0];
             return $replacement;
-        }, $html);
+        }, $html );
 
         return [$html, $scripts];
     }
 
-    private function add_scripts($html, $scripts) {
-        foreach ($scripts as $placeholder => $script) {
-            $html = str_replace($placeholder, $script, $html);
+    private function add_scripts( $html, $scripts ) {
+        foreach ( $scripts as $placeholder => $script ) {
+            $html = str_replace( $placeholder, $script, $html );
         }
-
         return $html;
     }
 
-    private function process_html($html ) {
+    private function process_html( $html ) {
         # Check that we have DOM loaded, return the data unmodified if we don't
         if ( !class_exists( 'DOMDocument' ) || !class_exists( 'DOMXPath' ) ) {
             return $html;
         }
 
-        list($html, $scripts) = $this->remove_scripts($html);
+        list( $html, $scripts ) = $this->remove_scripts( $html );
 
         # Try to create a document and xpath, return the data unmodified if we can't
         $doc = new \DOMDocument();
@@ -150,48 +174,30 @@ class Fact_Maven_Remove_HTTP {
         $xpath = new \DOMXPath( $doc );
 
         # Create the regex in use based on the current option value
-        $base_url_without_protocol = preg_replace( '#^https?://#i', '', home_url() , '#i' );
-        $replace_regex = $this->option == 1
-            ? '#https?:(//' . preg_quote( $base_url_without_protocol, '#' ) . ')#i'
-            : '#https?:(//[^/]+)#i';
+        if ( $this->option == 1 ) {
+            $regex = '#https?:(//' . preg_replace( '/https?:\/\//', '', home_url() ) . ')#i';
+        }
+        else {
+            $regex = '#https?:(//[^/]+)#i';
+        }
 
         # Process the specific tag lists first
-        foreach ( $this->replace_searches as $tag_name => $attributes ) {
-            $xpath_expr = '//' . $tag_name . '[@' . implode( ' or @', $attributes ) . ']';
-
+        /*foreach ( $this->tags as $tag => $attributes ) {
+            $xpath_expr = '//' . $tag . '[@' . implode( ' or @', $attributes ) . ']';
             foreach ( $xpath->query( $xpath_expr ) as $element ) {
-                $this->process_element_attributes( $element, $attributes, $replace_regex );
+                $this->process_element_attributes( $element, $attributes, $regex );
             }
-        }
+        }*/
 
         # Process global attributes
-        if ( !empty( $this->global_attrs ) ) {
-            foreach ( $xpath->query( '//*[@' . implode( ' or @', $this->global_attrs ) . ']' ) as $element ) {
-                $this->process_element_attributes( $element, $this->global_attrs, $replace_regex );
-            }
-        }
-
-        # Process global content elements
-        if ( !empty( $this->global_content_tags ) ) {
-            foreach ( $xpath->query( '//*[self::' . implode( ' or self::', $this->global_attrs ) . ']' ) as $element ) {
-                $element->textContent = preg_replace( $replace_regex, '$1', $element->textContent );
+        if ( !empty( $this->list_attributes ) ) {
+            foreach ( $xpath->query( '//*[@' . implode( ' or @', $this->list_attributes ) . ']' ) as $element ) {
+                $this->process_element_attributes( $element, $this->list_attributes, $regex );
             }
         }
 
         # Return the modified HTML as a string
-        return $this->add_scripts($doc->saveHTML(), $scripts);
-    }
-
-    public function ob_flush_handler( $html ) {
-        # Apply processing only if the type is applicable
-        return $this->is_applicable_content_type()
-            ? $this->process_html( $html )
-            : $html;
-    }
-
-    public function protocol_relative() {
-        # Enable output buffering
-        ob_start( array( $this, 'ob_flush_handler' ) );
+        return $this->add_scripts( $doc->saveHTML(), $scripts );
     }
 }
 # Instantiate the class
