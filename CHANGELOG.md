@@ -1,7 +1,9 @@
 ## Changelog
 ### 2.0.0
 *2017-03-DD*
-* Implement [DOMXPath](https://secure.php.net/manual/en/class.domxpath.php)
+* **Feature**: Option to switch between protocol relative or relative URL
+* Protocols aren't removed from backend
+* **Fix**: Links in "style" tags aren't affected
 
 ### 1.1.1
 *2017-01-16*
