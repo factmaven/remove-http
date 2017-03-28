@@ -2,8 +2,8 @@
 ### 2.0.0
 *2017-03-28*
 * **Feature**: Switch between protocol-relative or relative URLs
-* Improved regex
-* **Fix**: Links in "style" tags aren't affected
+* Ignore `<link>` tags with `rel="canonical"` because [they must be absolute URLs](https://support.google.com/webmasters/answer/139066#2)
+* **Fix**: Links in "style" tags weren't affected
 
 ### 1.1.1
 *2017-01-16*

@@ -4,7 +4,7 @@ Donate link: https://www.factmaven.com/
 Tags: cloudflare, http, https, insecure content, mixed content, mixed content warning, partially encrypted, protocol relative url, protocol rewriting, relative protocol, remove http, remove https, rewrite, ssl, url
 Requires at least: 3.0.0
 Tested up to: 4.7.1
-Stable tag: 1.1.1
+Stable tag: 2.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -49,23 +49,14 @@ According to [Google](https://developers.google.com/web/fundamentals/security/pr
 
 In short, mixed content degrades the security and user experience of your HTTPS site.
 
-= What does the option "*only apply to internal links*" do exactly? =
-Changes will only apply to internal links. For example, if your domain was `example.com`, it will look like the following:
-`
-<link rel="profile" href="http://gmpg.org/xfn/11">
-<script type='text/javascript' src='/script.js'></script>
-<a href="https://www.factmaven.com" title="Fact Maven">Fact Maven</a>
-<img src="/image.jpg" width="150" height="50" />
-` 
-
 == Changelog ==
 = 2.0.0 =
 
 *2017-03-28*
 
-* **Feature**: Option to switch between protocol-relative or relative URLs
-* Improved regex
-* **Fix**: Links in "style" tags aren't affected
+* **Feature**: Switch between protocol-relative or relative URLs
+* Ignore `<link>` tags with `rel="canonical"` because [they must be absolute URLs](https://support.google.com/webmasters/answer/139066#2)
+* **Fix**: Links in "style" tags weren't affected
 
 = 1.1.1 =
 

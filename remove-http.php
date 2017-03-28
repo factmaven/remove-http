@@ -56,7 +56,7 @@ class Fact_Maven_Remove_HTTP {
         ?> <fieldset><legend class="screen-reader-text"><span>Site Address Format</span></legend>
         <label><input type="radio" name="factmaven_rhttp" value="1" <?php checked( '1', $this->option ); ?> checked="checked"> <span class="date-time-text format-i18n">Protocol-Relative</span><code>//example.com/sample-post/</code></label><br>
         <label><input type="radio" name="factmaven_rhttp" value="2" <?php checked( '2', $this->option ); ?>> <span class="date-time-text format-i18n">Relative</span><code>/sample-post/</code></label><br>
-        <p class="description" id="protocol-description">Helps resolve <a href="https://wordpress.org/plugins/remove-http/faq/">mixed content warnings</a>.</p></td>
+        <p class="description" id="protocol-description">Selecting Relative will only apply to internal links. External links will become Protocol-Relative.</p></td>
         </fieldset> <?php
     }
 
@@ -75,15 +75,12 @@ class Fact_Maven_Remove_HTTP {
             # If the content-type is 'NULL' or 'text/html', apply rewrite
             if ( is_null( $content_type ) || substr( $content_type, 0, 9 ) === 'text/html' ) {
                 # If 'Relative' option is selected, remove domain from all internal links
-                // $exceptions = '<input\b[^<]*\bvalue=[\"\']https?:\/\/(*SKIP)(*F)';
                 $exceptions = '<(?:input\b[^<]*\bvalue=[\"\']https?:\/\/|link\b[^<]*?\brel=[\'\"]canonical[\'\"][^<]*?>)(*SKIP)(*F)';
                 if ( $this->option == 2 ) {
                     $website = preg_replace( '/https?:\/\//', '', home_url() );
-                    // $links = preg_replace( '/<input\b[^<]*\bvalue=[\"\']https?:\/\/(*SKIP)(*F)|https?:\/\/' . $website . '/', '', $links );
                     $links = preg_replace( '/' . $exceptions . '|https?:\/\/' . $website . '/', '', $links );
                 }
                 # For all external links, remove protocols
-                // $links = preg_replace( '/<input\b[^<]*\bvalue=[\"\']https?:\/\/(*SKIP)(*F)|https?:\/\//', '//', $links );
                 $links = preg_replace( '/' . $exceptions . '|https?:\/\//', '//', $links );
             }
             # Return protocol relative links
