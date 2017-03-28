@@ -3,7 +3,7 @@
  * Plugin Name: Remove HTTP
  * Plugin URI: https://wordpress.org/plugins/remove-http/
  * Description: Removes both HTTP and HTTPS protocols from links.
- * Version: 2.0.0-beta
+ * Version: 2.0.0
  * Author: Fact Maven
  * Author URI: https://www.factmaven.com/
  * License: GPLv3
@@ -63,10 +63,6 @@ class Fact_Maven_Remove_HTTP {
     public function protocol_relative() {
         # Enable output buffering
         ob_start( function( $links ) {
-            # If in the admin panel, return
-            if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
-                return $links;
-            }
             # Check for 'Content-Type' headers only
             $content_type = NULL;
             foreach ( headers_list() as $header ) {
@@ -78,15 +74,17 @@ class Fact_Maven_Remove_HTTP {
             }
             # If the content-type is 'NULL' or 'text/html', apply rewrite
             if ( is_null( $content_type ) || substr( $content_type, 0, 9 ) === 'text/html' ) {
-                # Remove protocol from home URL
+                # If 'Relative' option is selected, remove domain from all internal links
+                // $exceptions = '<input\b[^<]*\bvalue=[\"\']https?:\/\/(*SKIP)(*F)';
+                $exceptions = '<(?:input\b[^<]*\bvalue=[\"\']https?:\/\/|link\b[^<]*?\brel=[\'\"]canonical[\'\"][^<]*?>)(*SKIP)(*F)';
                 if ( $this->option == 2 ) {
                     $website = preg_replace( '/https?:\/\//', '', home_url() );
-                    $links = preg_replace( '|https?:\/\/' . $website . '|', '', $links );
-                    $links = preg_replace( '|https?:\/\/(.*?)|', '//$1', $links );
+                    // $links = preg_replace( '/<input\b[^<]*\bvalue=[\"\']https?:\/\/(*SKIP)(*F)|https?:\/\/' . $website . '/', '', $links );
+                    $links = preg_replace( '/' . $exceptions . '|https?:\/\/' . $website . '/', '', $links );
                 }
-                else {
-                    $links = preg_replace( '|https?:\/\/(.*?)|', '//$1', $links );
-                }
+                # For all external links, remove protocols
+                // $links = preg_replace( '/<input\b[^<]*\bvalue=[\"\']https?:\/\/(*SKIP)(*F)|https?:\/\//', '//', $links );
+                $links = preg_replace( '/' . $exceptions . '|https?:\/\//', '//', $links );
             }
             # Return protocol relative links
             return $links;

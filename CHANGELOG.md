@@ -1,8 +1,8 @@
 ## Changelog
 ### 2.0.0
-*2017-03-DD*
-* **Feature**: Option to switch between protocol relative or relative URL
-* Protocols aren't removed from backend
+*2017-03-28*
+* **Feature**: Switch between protocol-relative or relative URLs
+* Improved regex
 * **Fix**: Links in "style" tags aren't affected
 
 ### 1.1.1
@@ -11,7 +11,7 @@
 
 ### 1.1.0
 *2016-10-25*
-* **Feature**: Option to remove protocols from internal links only (see *General* > *Protocol Relative URL*)
+* **Feature**: Remove protocols from internal links only (see *General* > *Protocol Relative URL*)
 * Added uninstall to delete custom plugin options
 * Improved regex to find all protocols
 * Simplified and removed redundant code

@@ -17,22 +17,22 @@ No changes to the links are made in the database. Simply install and activate th
 
 = Before =
 `
-<link rel='stylesheet' id='some-id'  href='https://example.com/some/style.css' type='text/css' media='all' />
-<script type='text/javascript' src='http://example.com/some/script.js'></script>
-<a href="https://example.com" title="Some Title" rel="home">Some Link</a>
-<img src="http://example.com/some/image.jpg" alt="Some Alt" width="150" height="50" />
+<link rel='stylesheet' href='https://example.com/style.css' type='text/css' />
+<script type='text/javascript' src='http://example.com/script.js'></script>
+<a href="https://example.com" title="Example">Example</a>
+<img src="http://example.com/image.jpg" width="150" height="50" />
 `
 
 = After =
 `
-<link rel='stylesheet' id='some-id'  href='//example.com/some/style.css' type='text/css' media='all' />
-<script type='text/javascript' src='//example.com/some/script.js'></script>
-<a href="//example.com" title="Some Title" rel="home">Some Link</a>
-<img src="//example.com/some/image.jpg" alt="Some Alt" width="150" height="50" />
+<link rel='stylesheet' href='//example.com/style.css' type='text/css' />
+<script type='text/javascript' src='//example.com/script.js'></script>
+<a href="//example.com" title="Example">Example</a>
+<img src="//example.com/image.jpg" width="150" height="50" />
 `
 
-= Apply to internal links only =
-Additionally, there is an option (under the *General* settings) to apply changes to internal links only.
+= Switch to Relative URLs =
+There is an option (under the *General* settings) to change internal links to relative URLs.
 
 = Contribute on GitHub =
 Want to help improve this plugin? Head over to our [GitHub page](https://github.com/factmaven/remove-http/).
@@ -53,12 +53,20 @@ In short, mixed content degrades the security and user experience of your HTTPS 
 Changes will only apply to internal links. For example, if your domain was `example.com`, it will look like the following:
 `
 <link rel="profile" href="http://gmpg.org/xfn/11">
-<script type='text/javascript' src='//example.com/some/script.js'></script>
-<a href="https://www.factmaven.com" title="Fact Maven" rel="home">Fact Maven</a>
-<img src="//example.com/some/image.jpg" alt="Some Alt" width="150" height="50" />
+<script type='text/javascript' src='/script.js'></script>
+<a href="https://www.factmaven.com" title="Fact Maven">Fact Maven</a>
+<img src="/image.jpg" width="150" height="50" />
 ` 
 
 == Changelog ==
+= 2.0.0 =
+
+*2017-03-28*
+
+* **Feature**: Option to switch between protocol-relative or relative URLs
+* Improved regex
+* **Fix**: Links in "style" tags aren't affected
+
 = 1.1.1 =
 
 *2017-01-16*
