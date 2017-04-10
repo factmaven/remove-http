@@ -1,4 +1,8 @@
 ## Changelog
+### 2.1.0
+*2017-04-09*
+* Restored option to ignore external links
+
 ### 2.0.0
 *2017-03-28*
 * **Feature**: Switch between protocol-relative or relative URLs

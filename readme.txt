@@ -3,8 +3,8 @@ Contributors: factmaven, ethanosullivan
 Donate link: https://www.factmaven.com/
 Tags: cloudflare, http, https, insecure content, mixed content, mixed content warning, partially encrypted, protocol relative url, protocol rewriting, relative protocol, remove http, remove https, rewrite, ssl, url
 Requires at least: 3.0.0
-Tested up to: 4.7.1
-Stable tag: 2.0.0
+Tested up to: 4.7.3
+Stable tag: 2.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -50,6 +50,12 @@ According to [Google](https://developers.google.com/web/fundamentals/security/pr
 In short, mixed content degrades the security and user experience of your HTTPS site.
 
 == Changelog ==
+= 2.1.0 =
+
+*2017-04-09*
+
+* Restored option to ignore external links
+
 = 2.0.0 =
 
 *2017-03-28*

@@ -3,7 +3,7 @@
  * Plugin Name: Remove HTTP
  * Plugin URI: https://wordpress.org/plugins/remove-http/
  * Description: Removes both HTTP and HTTPS protocols from links.
- * Version: 2.0.0
+ * Version: 2.1.0
  * Author: Fact Maven
  * Author URI: https://www.factmaven.com/
  * License: GPLv3
@@ -14,11 +14,28 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Fact_Maven_Remove_HTTP {
 
-    private $option;
+    private $option, $plugin;
 
     public function __construct() {
-        # Get plugin option
+        # Call the core Plugin API
+        require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+        # Get plugin's metadata
+        $this->plugin = get_plugin_data( __FILE__ );
+        # If the plugin version is lower or not defined, remove plugin options
+        if ( ( get_option( 'factmaven_rhttp_version' ) < $this->plugin['Version'] ) || ! get_option( 'factmaven_rhttp_version' ) ) {
+            # Remove options with the prefix "factmaven_rhttp_"
+            foreach ( wp_load_alloptions() as $option => $value ) {
+                if ( strpos( $option, 'factmaven_rhttp' ) === 0 ) delete_option( $option );
+            }
+            # Add options for new plugin version
+            update_option( 'factmaven_rhttp_version', $this->plugin['Version'] );
+        }
+
+        # Get plugin options
         $this->option = get_option( 'factmaven_rhttp' );
+        # Set default options
+        if ( empty( $this->option['format'] ) ) $this->option['format'] = 'protocol-relative';
+        if ( empty( $this->option['external'] ) ) $this->option['external'] = '0';
         # Add link to plugin settings
         add_filter( 'plugin_action_links', array( $this, 'settings_link' ), 10, 2 );
         # Add custom settings field
@@ -39,24 +56,26 @@ class Fact_Maven_Remove_HTTP {
     }
 
     public function settings_field() {
-        # Register the setting
+        # Register the settings
         register_setting( 'general', 'factmaven_rhttp' );
         # Add settings field
-        add_settings_field( 'protocol_relative', 'Site Address Format', array( $this, 'options' ), 'general' );
+        add_settings_field( 'protocol_relative', 'URL Format', array( $this, 'options' ), 'general' );
     }
 
     public function settings_location() {
         # Insert the settings field after the 'Site Address (URL)'
         ?> <script type="text/javascript">
-        jQuery( '#protocol-description' ).closest( 'tr' ).insertAfter( jQuery( '#home-description' ).closest( 'tr' ) );
+        jQuery( '#format-description' ).closest( 'tr' ).insertAfter( jQuery( '#home-description' ).closest( 'tr' ) );
         </script> <?php
     }
 
     public function options() {
-        ?> <fieldset><legend class="screen-reader-text"><span>Site Address Format</span></legend>
-        <label><input type="radio" name="factmaven_rhttp" value="1" <?php checked( '1', $this->option ); ?> checked="checked"> <span class="date-time-text format-i18n">Protocol-Relative</span><code>//example.com/sample-post/</code></label><br>
-        <label><input type="radio" name="factmaven_rhttp" value="2" <?php checked( '2', $this->option ); ?>> <span class="date-time-text format-i18n">Relative</span><code>/sample-post/</code></label><br>
-        <p class="description" id="protocol-description">Selecting Relative will only apply to internal links. External links will become Protocol-Relative.</p></td>
+        # Display plugin settings field
+        ?> <fieldset>
+        <label><input type="radio" name="factmaven_rhttp[format]" value="protocol-relative" <?php checked( 'protocol-relative', $this->option['format'] ); ?> checked="checked"> <span class="date-time-text format-i18n">Protocol-Relative</span><code>//example.com/sample-post/</code></label><br>
+        <label><input type="radio" name="factmaven_rhttp[format]" value="relative" <?php checked( 'relative', $this->option['format'] ); ?>> <span class="date-time-text format-i18n">Relative</span><code>/sample-post/</code></label><br>
+        <label><input name="factmaven_rhttp[external]" type="checkbox" value="1" <?php checked( '1', $this->option['external'] ); ?>> Ignore external links</label>
+        <p class="description" id="format-description">Relative format will only affect internal links.</p>
         </fieldset> <?php
     }
 
@@ -74,14 +93,19 @@ class Fact_Maven_Remove_HTTP {
             }
             # If the content-type is 'NULL' or 'text/html', apply rewrite
             if ( is_null( $content_type ) || substr( $content_type, 0, 9 ) === 'text/html' ) {
-                # If 'Relative' option is selected, remove domain from all internal links
+                # Get domain without protocol                
+                $website = preg_replace( '/https?:\/\//', '', home_url() );
+                # Ignore input tags link tags with 'rel=canonical'
                 $exceptions = '<(?:input\b[^<]*\bvalue=[\"\']https?:\/\/|link\b[^<]*?\brel=[\'\"]canonical[\'\"][^<]*?>)(*SKIP)(*F)';
-                if ( $this->option == 2 ) {
-                    $website = preg_replace( '/https?:\/\//', '', home_url() );
-                    $links = preg_replace( '/' . $exceptions . '|https?:\/\/' . $website . '/', '', $links );
+                # If 'Ignore external links' is selected, only apply changes to internal links
+                if ( $this->option['external'] == 1 ) {
+                    if ( $this->option['format'] == 'relative' ) $links = preg_replace( '/' . $exceptions . '|https?:\/\/' . $website . '/', '', $links );
+                    else $links = preg_replace( '/' . $exceptions . '|https?:\/\/' . $website . '/', '//$1' . $website, $links );
                 }
-                # For all external links, remove protocols
-                $links = preg_replace( '/' . $exceptions . '|https?:\/\//', '//', $links );
+                else {
+                    if ( $this->option['format'] == 'relative' ) $links = preg_replace( '/' . $exceptions . '|https?:\/\/' . $website . '/', '', $links );
+                    else $links = preg_replace( '/' . $exceptions . '|https?:\/\//', '//', $links );
+                }
             }
             # Return protocol relative links
             return $links;
