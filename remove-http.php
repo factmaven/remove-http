@@ -94,7 +94,8 @@ class Fact_Maven_Remove_HTTP {
             # If the content-type is 'NULL' or 'text/html', apply rewrite
             if ( is_null( $content_type ) || substr( $content_type, 0, 9 ) === 'text/html' ) {
                 # Get domain without protocol                
-                $website = preg_replace( '/https?:\/\//', '', home_url() );
+                $website = preg_replace( '/^https?:\/\//', '', home_url() );
+                $website = preg_replace( '/\/.*$/', '', $website );
                 # Ignore input tags link tags with 'rel=canonical'
                 $exceptions = '<(?:input\b[^<]*\bvalue=[\"\']https?:\/\/|link\b[^<]*?\brel=[\'\"]canonical[\'\"][^<]*?>)(*SKIP)(*F)';
                 # If 'Ignore external links' is selected, only apply changes to internal links

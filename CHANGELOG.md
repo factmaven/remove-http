@@ -1,7 +1,11 @@
 ## Changelog
+### 2.1.1
+*2017-09-09*
+* Added support for relative domain paths [#8](https://github.com/factmaven/remove-http/issues/8)
+
 ### 2.1.0
 *2017-04-09*
-* Restored option to ignore external links
+* Restored option to ignore external links [#6](https://github.com/factmaven/remove-http/issues/6)
 
 ### 2.0.0
 *2017-03-28*

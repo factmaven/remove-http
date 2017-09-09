@@ -2,7 +2,7 @@
 /**
  * Runs automatically when the plugin is deleted.
  *
- * @author Fact Maven Corp.
+ * @author Fact Maven
  * @link https://wordpress.org/plugins/remove-http/
  */
 
