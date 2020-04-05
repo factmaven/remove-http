@@ -74,7 +74,7 @@ class Fact_Maven_Remove_HTTP {
     public function options() {
         // Display plugin settings field
         ?> <fieldset>
-        <label><input type="radio" name="factmaven_rhttp[format]" value="protocol-relative" <?php checked( 'protocol-relative', $this->option['format'] ); ?> checked="checked"> <span class="date-time-text format-i18n">Protocol-Relative</span><code>//example.com/sample-post/</code></label><br>
+        <label><input type="radio" name="factmaven_rhttp[format]" value="protocol-relative" <?php checked( 'protocol-relative', $this->option['format'] ); ?> checked="checked"> <span class="date-time-text format-i18n">Protocol-Relative</span><code>//<?php echo preg_replace( '/^https?:\/\//', '', home_url() ); ?>/sample-post/</code></label><br>
         <label><input type="radio" name="factmaven_rhttp[format]" value="relative" <?php checked( 'relative', $this->option['format'] ); ?>> <span class="date-time-text format-i18n">Relative</span><code>/sample-post/</code></label><br>
         <label><input name="factmaven_rhttp[external]" type="checkbox" value="1" <?php checked( '1', $this->option['external'] ); ?>> Ignore external links</label>
         <p class="description" id="format-description">Relative format will only affect internal links.</p>
