@@ -67,7 +67,7 @@ class Fact_Maven_Remove_HTTP {
     public function settings_location() {
         // Insert the settings field after the 'Site Address (URL)'
         ?> <script type="text/javascript">
-        jQuery( '#format-description' ).closest( 'tr' ).insertAfter( jQuery( '#home-description' ).closest( 'tr' ) );
+        jQuery( '#format-description' ).closest( 'tr' ).insertAfter( jQuery( '#home' ).closest( 'tr' ) );
         </script> <?php
     }
 
@@ -78,10 +78,10 @@ class Fact_Maven_Remove_HTTP {
         <label><input type="radio" name="factmaven_rhttp[format]" value="relative" <?php checked( 'relative', $this->option['format'] ); ?>> <span class="date-time-text format-i18n">Relative</span><code>/sample-post/</code></label><br>
         <label><input name="factmaven_rhttp[external]" type="checkbox" value="1" <?php checked( '1', $this->option['external'] ); ?>> Ignore external links</label>
         <p class="description" id="format-description">Relative format will only affect internal links.</p>
-        <!-- <br>
-        <label>Ignore the following domains. Enter one domain per line.
-        <textarea name="factmaven_rhttp[ignore]" placeholder="example.com" rows="5" cols="5" class="large-text code"><?php echo( $this->option['ignore'] ); ?></textarea></label>
-        </fieldset> --> <?php
+        <br>
+        <!-- <label>Ignore the following domains. Enter one domain per line.
+        <textarea name="factmaven_rhttp[ignore]" placeholder="example.com" rows="5" cols="5" class="large-text code"><?php echo( $this->option['ignore'] ); ?></textarea></label> -->
+        </fieldset> <?php
     }
 
     public function protocol_relative() {
