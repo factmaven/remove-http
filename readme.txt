@@ -3,9 +3,9 @@ Contributors: factmaven, ethanosullivan
 Donate link: https://www.factmaven.com/
 Tags: cloudflare, http, https, insecure content, mixed content, mixed content warning, partially encrypted, protocol relative url, protocol rewriting, relative protocol, remove http, remove https, rewrite, ssl, url
 Requires at least: 3.0.0
-Tested up to: 4.8.1
+Tested up to: 4.9.1
 Requires PHP: 5.2
-Stable tag: 2.1.1
+Stable tag: 2.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

@@ -1,4 +1,9 @@
 ## Changelog
+### 2.2.0
+*yyyy-mm-dd*
+* **Fix**: Protocol is only removed on frontend [#11](https://github.com/factmaven/remove-http/issues/11)
+* **Fix**: Settings icon is enlarged on Plugin page [#9](https://github.com/factmaven/remove-http/issues/9)
+
 ### 2.1.1
 *2017-09-09*
 * Added support for relative domain paths [#8](https://github.com/factmaven/remove-http/issues/8)
