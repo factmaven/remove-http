@@ -1,9 +1,8 @@
 ## Changelog
 ### 2.2.0
 *yyyy-mm-dd*
-* **Feature**: Option to enable/disable function in the Admin Dashboard
+* Protocol is only removed on frontend [#11](https://github.com/factmaven/remove-http/issues/11)
 * **Fix**: Settings not showing under _Site Address (URL)_
-* **Fix**: Protocol is only removed on frontend [#11](https://github.com/factmaven/remove-http/issues/11)
 * **Fix**: Settings icon is enlarged on Plugin page [#9](https://github.com/factmaven/remove-http/issues/9)
 
 ### 2.1.1
