@@ -4,7 +4,7 @@ Donate link: https://www.factmaven.com/
 Tags: cloudflare, http, https, insecure content, mixed content, mixed content warning, partially encrypted, protocol relative url, protocol rewriting, relative protocol, remove http, remove https, rewrite, ssl, url
 Requires at least: 3.0.0
 Tested up to: 5.4
-Requires PHP: 5.2
+Requires PHP: 4.3
 Stable tag: 2.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -48,9 +48,22 @@ Want to help improve this plugin? Head over to our [GitHub page](https://github.
 According to [Google](https://developers.google.com/web/fundamentals/security/prevent-mixed-content/what-is-mixed-content): 
 > Mixed content occurs when initial HTML is loaded over a secure HTTPS connection, but other resources (such as images, videos, stylesheets, scripts) are loaded over an insecure HTTP connection. This is called mixed content because both HTTP and HTTPS content are being loaded to display the same page, and the initial request was secure over HTTPS. Modern browsers display warnings about this type of content to indicate to the user that this page contains insecure resources.
 
-In short, mixed content degrades the security and user experience of your HTTPS site.
+= How can I make my website fully SSL (on https://)? =
+You can actually remove the dependency of this plugin by following these step-by-step instructions below:
+
+https://wordpress.stackexchange.com/a/238842/98212
+
+It's slightly technical because you'll need to connect to your website's host file through an FTP (such as FileZilla). After that, all of your links will be pointing towards your new HTTPS protocol.
 
 == Changelog ==
+= 2.2.0 =
+
+*2020-04-06*
+
+* Protocol is only removed on frontend [#11](https://github.com/factmaven/remove-http/issues/11)
+* **Fix**: Settings not showing under _Site Address (URL)_
+* **Fix**: Settings icon is enlarged on Plugin page [#9](https://github.com/factmaven/remove-http/issues/9)
+
 = 2.1.1 =
 
 *2017-09-09*
@@ -70,48 +83,3 @@ In short, mixed content degrades the security and user experience of your HTTPS 
 * **Feature**: Switch between protocol-relative or relative URLs
 * Ignore `<link>` tags with `rel="canonical"` because [they must be absolute URLs](https://support.google.com/webmasters/answer/139066#2)
 * **Fix**: Links in "style" tags weren't affected
-
-= 1.1.1 =
-
-*2017-01-16*
-
-* Minor code improvements
-
-= 1.1.0 =
-
-*2016-10-25*
-
-* **Feature**: Option to remove protocols from internal links only (see *General* > *Protocol Relative URL*)
-* Added uninstall to delete custom plugin options
-* Improved regex to find all protocols
-* Simplified and removed redundant code
-
-= 1.0.2 =
-
-*2016-10-24*
-
-* Function will run once WordPress, all plugins, and the theme are fully loaded
-* Reverted back to original regex from v1.0.0
-* Upgrade notice shown when update is available
-* **Fix**: Conflict with [Visual Composer](https://vc.wpbakery.com) plugin
-* **Fix**: YouTube videos in [Revolution Slider](https://revolution.themepunch.com) plugin stopped playing
-
-= 1.0.1 =
-
-*2016-10-10*
-
-* Improved regex to find all protocols
-* Comments added for code explanation
-
-= 1.0.0 =
-
-*2016-09-05*
-
-* Initial release, huzzah!
-
-== Upgrade Notice ==
-= 1.1.0 =
-New plugin option added. Protocol-relative URLs can be applied to internal links only.
-
-= 1.0.2 =
-Fixed issue with plugin conflicts such as Visual Composer and Revolution slider.

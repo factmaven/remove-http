@@ -1,6 +1,6 @@
 ## Changelog
 ### 2.2.0
-*yyyy-mm-dd*
+*2020-04-06*
 * Protocol is only removed on frontend [#11](https://github.com/factmaven/remove-http/issues/11)
 * **Fix**: Settings not showing under _Site Address (URL)_
 * **Fix**: Settings icon is enlarged on Plugin page [#9](https://github.com/factmaven/remove-http/issues/9)
