@@ -51,7 +51,7 @@ According to [Google](https://developers.google.com/web/fundamentals/security/pr
 = How can I make my website fully SSL (on https://)? =
 You can actually remove the dependency of this plugin by following these step-by-step instructions below:
 
-https://wordpress.stackexchange.com/a/238842/98212
+[https://wordpress.stackexchange.com/a/238842/98212](https://wordpress.stackexchange.com/a/238842/98212)
 
 It's slightly technical because you'll need to connect to your website's host file through an FTP (such as FileZilla). After that, all of your links will be pointing towards your new HTTPS protocol.
 
