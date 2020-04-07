@@ -34,9 +34,15 @@ class Fact_Maven_Remove_HTTP {
         // Get plugin options
         $this->option = get_option( 'factmaven_rhttp' );
         // Set default options
-        if ( empty( $this->option['format'] ) ) $this->option['format'] = 'protocol-relative';
-        if ( empty( $this->option['ignore'] ) ) $this->option['ignore'] = '';
-        if ( empty( $this->option['external'] ) ) $this->option['external'] = '0';
+        if ( empty( $this->option['format'] ) ) {
+            $this->option['format'] = 'protocol-relative';
+        }
+        if ( empty( $this->option['ignore'] ) ) {
+            $this->option['ignore'] = '';
+        }
+        if ( empty( $this->option['external'] ) ) {
+            $this->option['external'] = '0';
+        }
         // Add link to plugin settings
         add_filter( 'plugin_action_links', array( $this, 'settings_link' ), 10, 2 );
         // Add custom settings field
@@ -44,7 +50,9 @@ class Fact_Maven_Remove_HTTP {
         // Relocate settings field using jQuery
         add_action( 'admin_footer', array( $this, 'settings_location' ), 10, 1 );
         // Protocol is only removed on frontend, ignore Admin Dashboard
-        if ( !is_admin() && defined( 'DOING_AJAX' ) ) add_action( 'wp_loaded', array( $this, 'protocol_relative' ) , PHP_INT_MAX, 1 );
+        if ( !is_admin() && ( defined( 'DOING_AJAX' ) || 'DOING_AJAX' ) ) {
+            add_action( 'wp_loaded', array( $this, 'protocol_relative' ) , PHP_INT_MAX, 1 );
+        }
     }
 
     public function settings_link( $links, $file ) {
